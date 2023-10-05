@@ -1,6 +1,7 @@
 using BlazorShop.Api.Context;
 using BlazorShop.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,6 +30,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(policy =>
+policy.WithOrigins("http://localhost:7209", "https://localhost:7209")
+.AllowAnyMethod()
+.AllowAnyHeader()
+.WithHeaders(HeaderNames.ContentType));
 
 app.UseHttpsRedirection();
 

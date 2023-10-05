@@ -28,8 +28,8 @@ namespace BlazorShop.Api.Controllers
                 }
                 else
                 {
-                    var produtosDtos = produtos.ConverterProdutosParaDto();
-                    return Ok(produtosDtos);
+                    var produtoDtos = produtos.ConverterProdutosParaDto();
+                    return Ok(produtoDtos);
                 }
             }
             catch (Exception)
@@ -58,14 +58,14 @@ namespace BlazorShop.Api.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                   "Erro ao acessar a base de dados");
+                                  "Erro ao acessar o banco de dados");
             }
         }
 
         [HttpGet]
         [Route("{categoriaId}/GetItensPorCategoria")]
         public async Task<ActionResult<IEnumerable<ProdutoDto>>>
-        GetItensPorCategoria(int categoriaId)
+            GetItensPorCategoria(int categoriaId)
         {
             try
             {

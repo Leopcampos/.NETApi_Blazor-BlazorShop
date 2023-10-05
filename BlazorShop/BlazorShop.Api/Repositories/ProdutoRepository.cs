@@ -33,11 +33,11 @@ namespace BlazorShop.Api.Repositories
 
         public async Task<IEnumerable<Produto>> GetItensPorCategoria(int id)
         {
-            var produto = await _context.Produtos
+            var produtos = await _context.Produtos
                 .Include(p => p.Categoria)
-                .Where(p => p.Categoria.Equals(id)).ToListAsync();
+                .Where(p => p.CategoriaId.Equals(id)).ToListAsync();
 
-            return produto;
+            return produtos;
         }
     }
 }
