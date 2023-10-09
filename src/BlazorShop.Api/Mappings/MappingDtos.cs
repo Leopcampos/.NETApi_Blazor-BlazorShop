@@ -48,7 +48,7 @@ namespace BlazorShop.Api.Mappings
         }
 
         public static IEnumerable<CarrinhoItemDto> ConverterCarrinhoItensParaDto
-            (this IEnumerable<CarrinhoItemDto> carrinhoItens, IEnumerable<Produto> produtos)
+            (this IEnumerable<CarrinhoItem> carrinhoItens, IEnumerable<Produto> produtos)
         {
             return (from carrinhoItem in carrinhoItens
                     join produto in produtos
