@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<ICarrinhoCompraRepository, CarrinhoCompraRepository>();
 
 builder.Services.AddCors();
 
