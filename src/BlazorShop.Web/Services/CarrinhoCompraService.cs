@@ -44,6 +44,7 @@ namespace BlazorShop.Web.Services
             }
         }
 
+
         public async Task<List<CarrinhoItemDto>> GetItens(string usuarioId)
         {
             try
@@ -53,7 +54,7 @@ namespace BlazorShop.Web.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    if (response.StatusCode == HttpStatusCode.NoContent)
                     {
                         return Enumerable.Empty<CarrinhoItemDto>().ToList();
                     }
@@ -64,6 +65,23 @@ namespace BlazorShop.Web.Services
                     var message = await response.Content.ReadAsStringAsync();
                     throw new Exception($"Http Status Code: {response.StatusCode} Mensagem: {message}");
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<CarrinhoItemDto> DeletaItem(int id)
+        {
+            try
+            {
+                var response = await httpClient.DeleteAsync($"api/CarrinhoCompra/{id}");
+                if(response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<CarrinhoItemDto>();
+                }
+                return default(CarrinhoItemDto);
             }
             catch (Exception)
             {
