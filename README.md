@@ -1,4 +1,4 @@
-# BlazorShop
+# BlazorShop (E-Commercer)
 
 Playlist do Professor Macoratti => https://www.youtube.com/playlist?list=PLJ4k1IC8GhW1GFJbYD2uo-_pLfdvX6Pu9
 
