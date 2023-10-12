@@ -25,7 +25,8 @@ namespace BlazorShop.Api.Repositories
             if (await CarrinhoItemJaExiste(carrinhoItemAdicionaDto.CarrinhoId,
                 carrinhoItemAdicionaDto.ProdutoId) == false)
             {
-                //verifica se o produto existe e cria um novo item no carrinho
+                //verifica se o produto existe 
+                //cria um novo item no carrinho
                 var item = await (from produto in _context.Produtos
                                   where produto.Id == carrinhoItemAdicionaDto.ProdutoId
                                   select new CarrinhoItem

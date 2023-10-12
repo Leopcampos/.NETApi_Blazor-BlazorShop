@@ -140,7 +140,8 @@ namespace BlazorShop.Api.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        public async Task<ActionResult<CarrinhoItemDto>> AtualizaQuantidade(int id, CarrinhoItemAtualizaQuantidadeDto carrinhoItemAtualizaQuantidadeDto)
+        public async Task<ActionResult<CarrinhoItemDto>> AtualizaQuantidade(int id,
+        CarrinhoItemAtualizaQuantidadeDto carrinhoItemAtualizaQuantidadeDto)
         {
             try
             {
