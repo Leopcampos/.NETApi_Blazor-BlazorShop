@@ -10,18 +10,15 @@ namespace BlazorShop.Api.Controllers
     [ApiController]
     public class CarrinhoCompraController : ControllerBase
     {
-        private readonly ICarrinhoCompraRepository carrinhoCompraRepo;
-        private readonly IProdutoRepository produtoRepo;
+        private readonly ICarrinhoCompraRepository _carrinhoCompraRepository;
+        private readonly IProdutoRepository _produtoRepository;
 
         private ILogger<CarrinhoCompraController> logger;
 
-        public CarrinhoCompraController(ICarrinhoCompraRepository
-            carrinhoCompraRepository,
-            IProdutoRepository produtoRepository,
-            ILogger<CarrinhoCompraController> logger)
+        public CarrinhoCompraController(ICarrinhoCompraRepository carrinhoCompraRepository, IProdutoRepository produtoRepository, ILogger<CarrinhoCompraController> logger)
         {
-            carrinhoCompraRepo = carrinhoCompraRepository;
-            produtoRepo = produtoRepository;
+            _carrinhoCompraRepository = carrinhoCompraRepository;
+            _produtoRepository = produtoRepository;
             this.logger = logger;
         }
 
@@ -31,13 +28,13 @@ namespace BlazorShop.Api.Controllers
         {
             try
             {
-                var carrinhoItens = await carrinhoCompraRepo.GetItens(usuarioId);
+                var carrinhoItens = await _carrinhoCompraRepository.GetItens(usuarioId);
                 if (carrinhoItens == null)
                 {
                     return NoContent(); // 204 Status Code
                 }
 
-                var produtos = await this.produtoRepo.GetItens();
+                var produtos = await this._produtoRepository.GetItens();
                 if (produtos == null)
                 {
                     throw new Exception("Não existem produtos...");
@@ -58,13 +55,13 @@ namespace BlazorShop.Api.Controllers
         {
             try
             {
-                var carrinhoItem = await carrinhoCompraRepo.GetItem(id);
+                var carrinhoItem = await _carrinhoCompraRepository.GetItem(id);
                 if (carrinhoItem == null)
                 {
                     return NoContent(); // 204 Status Code
                 }
 
-                var produtos = await this.produtoRepo.GetItem(carrinhoItem.ProdutoId);
+                var produtos = await this._produtoRepository.GetItem(carrinhoItem.ProdutoId);
                 if (produtos == null)
                 {
                     throw new Exception("Não existem produtos...");
@@ -85,14 +82,14 @@ namespace BlazorShop.Api.Controllers
         {
             try
             {
-                var novoCarrinhoItem = await carrinhoCompraRepo.AdicionaItem(carrinhoItemAdicionaDto);
+                var novoCarrinhoItem = await _carrinhoCompraRepository.AdicionaItem(carrinhoItemAdicionaDto);
 
                 if (novoCarrinhoItem == null)
                 {
                     return NoContent(); //Status 204
                 }
 
-                var produto = await produtoRepo.GetItem(novoCarrinhoItem.ProdutoId);
+                var produto = await _produtoRepository.GetItem(novoCarrinhoItem.ProdutoId);
 
                 if (produto == null)
                 {
@@ -117,14 +114,14 @@ namespace BlazorShop.Api.Controllers
         {
             try
             {
-                var carrinhoItem = await carrinhoCompraRepo.DeletaItem(id);
+                var carrinhoItem = await _carrinhoCompraRepository.DeletaItem(id);
 
                 if (carrinhoItem == null)
                 {
                     return NotFound();
                 }
 
-                var produto = await produtoRepo.GetItem(carrinhoItem.ProdutoId);
+                var produto = await _produtoRepository.GetItem(carrinhoItem.ProdutoId);
 
                 if (produto is null)
                     return NotFound();
@@ -146,14 +143,14 @@ namespace BlazorShop.Api.Controllers
             try
             {
 
-                var carrinhoItem = await carrinhoCompraRepo.AtualizaQuantidade(id,
+                var carrinhoItem = await _carrinhoCompraRepository.AtualizaQuantidade(id,
                                        carrinhoItemAtualizaQuantidadeDto);
 
                 if (carrinhoItem == null)
                 {
                     return NotFound();
                 }
-                var produto = await produtoRepo.GetItem(carrinhoItem.ProdutoId);
+                var produto = await _produtoRepository.GetItem(carrinhoItem.ProdutoId);
                 var carrinhoItemDto = carrinhoItem.ConverterCarrinhoItemParaDto(produto);
                 return Ok(carrinhoItemDto);
 
@@ -161,6 +158,38 @@ namespace BlazorShop.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{categoriaId}/GetItensPorCategoria")]
+        public async Task<ActionResult<IEnumerable<ProdutoDto>>> GetItensPorCategoria(int categoriaId)
+        {
+            try
+            {
+                var produtos = await _produtoRepository.GetItensPorCategoria(categoriaId);
+                var produtosDto = produtos.ConverterProdutosParaDto();
+                return Ok(produtosDto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao acessar o banco de dados");
+            }
+        }
+
+        [HttpGet]
+        [Route("GetCategorias")]
+        public async Task<ActionResult<IEnumerable<CategoriaDto>>> GetCategorias()
+        {
+            try
+            {
+                var categorias = await _produtoRepository.GetCategorias();
+                var categoriaDto = categorias.ConverterCategoriasParaDto();
+                return Ok(categoriaDto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao acessar o banco de dados");
             }
         }
     }
