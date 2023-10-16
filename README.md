@@ -8,3 +8,4 @@ Criação do Projeto:
 - BlazorShop.Api (Web Api)
 - BlazorShop.Models (Biblioteca de Classe)
 - BlazorShop.Web (Blazor WebAssembly App)
+- Frontend usando o Blazor
